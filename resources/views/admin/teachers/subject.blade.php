@@ -2,34 +2,6 @@
 
 @section('content')
 
-
-    {{-- <div class="card mt-2 md:w-10/12 bg-white shadow-lg p-3 rounded-sm mx-auto flex justify-between items-center">
-        <div>
-            <p class="sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold placeholder-gray-700">Muro de la Clase</p>
-            <p class="md:text-md text-sm text-primary-500 font-semibold">{{$subject->name}}</p>
-            <p class="md:text-sm text-xs text-primary-400">{{$subject->course->name}}</p>
-        </div>
-        <div>
-        <a href="{{route('admin.teacher', $subject->id)}}" class="flex hover:shadow-lg px-4 py-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 inline-block" viewBox="0 0 306 306"><path data-original="#000000" class="active-path" data-old_color="#000000" fill="#A0AEC0" d="M247.35 35.7L211.65 0l-153 153 153 153 35.7-35.7L130.05 153z"/></svg>
-              </a>
-        </div>
-    </div>
-
-    <div class="card md:w-10/12 bg-gray-100 border-t shadow-lg p-3 rounded-sm mx-auto flex justify-between items-center">
-        <form action="#" method="POST">
-            @csrf
-            <div
-                class="border border-gray-400 bg-white h-10 rounded-sm py-1 content-center flex items-center">
-                <input name="annotation" type="text" class="bg-transparent focus:outline-none w-full text-sm p-2 text-gray-800" placeholder="Buscar...">
-                <button type="submit" class="text-teal-600 font-semibold p-2 rounded-full hover:bg-gray-200 mx-1 focus:shadow-sm focus:outline-none">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.725 485.725"  class="h-5 w-5 svg-inline--fa fa-info fa-w-6"><path d="M459.835 196.758L73.531 9.826C48.085-2.507 17.46 8.123 5.126 33.569a51.198 51.198 0 00-1.449 41.384l60.348 150.818h421.7a50.787 50.787 0 00-25.89-29.013zM64.025 259.904L3.677 410.756c-10.472 26.337 2.389 56.177 28.726 66.65a51.318 51.318 0 0018.736 3.631c7.754 0 15.408-1.75 22.391-5.12l386.304-187a50.79 50.79 0 0025.89-29.013H64.025z" data-original="#000000" class="hovered-path active-path" data-old_color="#000000" fill="#374957"/></svg>
-                </button>
-            </div>
-        </form>
-    </div> --}}
-
     <div class="card md:w-10/12 rounded-sm bg-gray-100 mx-auto mt-6 mb-4 shadow-lg">
         <div class="card-title bg-white w-full p-5 border-b flex items-center justify-between">
             <div>
@@ -38,10 +10,17 @@
                 <p class="md:text-sm text-xs text-primary-400">{{$subject->course->name}}</p>
             </div>
             <div>
-            <a href="{{route('admin.teacher', $subject->id)}}" class="flex text-teal-600 font-semibold p-3 rounded-full hover:bg-gray-200 mx-1 focus:shadow-sm focus:outline-none">
+            @if(@Auth::user()->hasRole('teacher'))
+                <a href="{{route('admin.teacher', $subject->id)}}" class="flex text-teal-600 font-semibold p-3 rounded-full hover:bg-gray-200 mx-1 focus:shadow-sm focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 inline-block" viewBox="0 0 306 306"><path data-original="#000000" class="active-path" data-old_color="#000000" fill="#A0AEC0" d="M247.35 35.7L211.65 0l-153 153 153 153 35.7-35.7L130.05 153z"/></svg>
+                    </a>
+                </div>
+            @else
+                <a href="{{route('admin.student', $subject->id)}}" class="flex text-teal-600 font-semibold p-3 rounded-full hover:bg-gray-200 mx-1 focus:shadow-sm focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 inline-block" viewBox="0 0 306 306"><path data-original="#000000" class="active-path" data-old_color="#000000" fill="#A0AEC0" d="M247.35 35.7L211.65 0l-153 153 153 153 35.7-35.7L130.05 153z"/></svg>
-                  </a>
-            </div>
+                </a>
+                </div>
+            @endif
         </div>
 
         <div class="w-auto mx-auto flex items-center justify-between p-5">
@@ -55,6 +34,8 @@
                 </button>
             </div>
         </form>
+            {{-- @if(@Auth::user()->hasRole('teacher')) --}}
+            @role('teacher')
             <a href="{{route('new.post', $subject->id)}}" class="hidden md:block btn btn-primary md:m-0 m-3">New Post</a>
             <a href="{{route('new.post', $subject->id)}}" class="flex md:hidden btn-primary md:m-0 m-3 p-1">
                 <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
@@ -63,6 +44,7 @@
                                         C15.952,9,16,9.447,16,10z" />
                 </svg>
             </a>
+            @endrole
         </div>
     </div>
 
@@ -78,17 +60,17 @@
                 </div>
 
                 <div class="w-9/12">
-                    <h2 class="text-sm font-medium text-gray-900 -mt-1">{{auth()->user()->name}} </h2>
+                    <h2 class="text-sm font-medium text-gray-900 -mt-1">{{$post->user->name}} </h2>
                     <p class="text-gray-700 font-light text-xs">{{$post->created_at}} </p>
                 </div>
 
                 <div class="w-3/12 text-right">
-                    <button onclick="toogleFm()" class="focus:outline-none text-gray-600 hover:bg-gray-300 rounded-full p-2">
+                    <button id="boton2" class="focus:outline-none text-gray-600 hover:bg-gray-300 rounded-full p-2">
                         <svg aria-hidden="true" data-prefix="fas" data-icon="ellipsis-v"
                         class=" h-4 w-4  svg-inline--fa fa-ellipsis-v fa-w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"/></svg>
 
                     </button>
-                    <div id="float-menu" class="hidden border bg-white absolute p-2 mt-8 text-sm w-auto top-10 right-0 shadow-lg
+                    <div id="capa2" style="display:none;" class="hidden border bg-white absolute p-2 mt-8 text-sm w-auto top-10 right-0 shadow-lg
                     rounded-sm text-left">
                         <a href="#" class="block py-2">Editar</a>
 
@@ -163,6 +145,32 @@
             oo.classList.toggle('hidden')
 
         }
+
+        //almacenando el div y el boton en unas variables
+    var div2 = document.getElementById('capa2');
+    var but2 = document.getElementById('boton2');
+
+    //la funcion que oculta y muestra
+    function showHide(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if(div2.style.display == "none"){
+    div2.style.display = "block";
+    } else if(div2.style.display == "block"){
+    div2.style.display = "none";
+    }
+    }
+    //al hacer click en el boton
+    but2.addEventListener("click", showHide, false);
+
+    //funcion para cualquier clic en el documento
+    document.addEventListener("click", function(e){
+    //obtiendo informacion del DOM para
+    var clic = e.target;
+    if(div2.style.display == "block" && clic != div2){
+    div2.style.display = "none";
+    }
+    }, false);
 
 
     </script>

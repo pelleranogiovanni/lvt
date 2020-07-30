@@ -23,7 +23,7 @@
             </div>
 
             <div class="w-9/12">
-                <h2 class="text-sm font-medium text-gray-900 -mt-1">{{auth()->user()->name}} </h2>
+                <h2 class="text-sm font-medium text-gray-900 -mt-1">{{$post->user->name}} </h2>
                 <p class="text-gray-700 font-light text-xs">{{$post->created_at}} </p>
             </div>
 

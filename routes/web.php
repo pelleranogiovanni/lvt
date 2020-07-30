@@ -83,7 +83,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('posts', 'PostController')->except('create', 'index');
     Route::resource('annotations', 'AnnotationController');
 
-    Route::get('posts/index/{subject}', 'PostController@index')->name('posts.index'); //agregado para index del post
-    Route::get('newpost/{subject}','PostController@create')->name('new.post');
+    Route::get('posts/index/{subject}', 'PostController@index')->name('posts.index'); //agregado para index del post del teacher
+
+    // crear post
+    Route::group(['middleware' => ['role:teacher']], function () {
+        Route::get('newpost/{subject}','PostController@create')->name('new.post');
+    });
+
 });
 

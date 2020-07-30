@@ -36,13 +36,13 @@
 
             <div class=" w-full flex relative items-center text-right float-right justify-end ">
                 <div class="p-2 flex absolute">
-                    <button onclick="notification()" class="rounded-full hover:bg-gray-400 focus:shadow-md focus:outline-none flex md:mr-4" >
+                    <button id="boton" class="rounded-full hover:bg-gray-400 focus:shadow-md focus:outline-none flex md:mr-4" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55" class="w-6 h-6 m-2 "><path d="M51.376 45.291C46.716 40.66 44.354 35.179 44.354 29v-8.994c.043-6.857-4.568-11.405-8.53-13.216-1.117-.51-2.294-.888-3.494-1.178V5c0-2.757-2.243-5-5-5s-5 2.243-5 5v.706c-1.079.283-2.139.629-3.146 1.093-4.379 2.018-8.815 6.882-8.855 13.201v9c0 6.388-2.256 11.869-6.705 16.291a1.002 1.002 0 00.535 1.695l9.491 1.639c1.79.309 3.415.556 4.944.758C20.339 52.804 23.766 55 27.512 55c3.747 0 7.175-2.198 8.919-5.621 1.522-.201 3.139-.447 4.919-.755l9.49-1.639a1 1 0 00.536-1.694zM24.329 5c0-1.654 1.346-3 3-3s3 1.346 3 3v.193a20.176 20.176 0 00-6 .05V5zm-8 16h-.006a1.001 1.001 0 01-.994-1.006c.03-4.682 3.752-7.643 5.948-8.654 3.849-1.775 8.594-1.772 12.469-.002a1 1 0 11-.832 1.818c-3.353-1.533-7.469-1.537-10.799 0-1.767.814-4.762 3.173-4.785 6.85a1 1 0 01-1.001.994zm17.606 28.678C32.416 51.739 30.047 53 27.512 53c-2.534 0-4.902-1.26-6.421-3.32h.001c.396.041.78.073 1.164.106.183.016.371.035.552.05.14.011.275.018.414.028 2.906.212 5.582.212 8.486.005.167-.012.33-.021.499-.034.218-.017.444-.04.665-.059.339-.03.676-.058 1.025-.094l.038-.004z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#0E2A3F"/></svg>
                         <p class="absolute bg-red-600 justify-center rounded-full px-1 mr-4 text-white text-xs">5</p>
                     </button>
 
                     {{-- notificaciones --}}
-                    <div id="menu-notification"  class="hidden border bg-white absolute p-2 mt-12 text-sm md:w-64 w-56 mx-auto right-0 shadow-lg z-50
+                    <div id="capa" style="display:none;"  class="hidden border bg-white absolute p-2 mt-12 text-sm md:w-64 w-56 mx-auto right-0 shadow-lg z-50
                     rounded-sm text-left md:mr-24 mr-6">
                         <a href="" class="block py-2 w-full">Se agregó una tarea..</a>
                         <a href="" class="block py-2">Has recibido una devolución</a>
@@ -208,7 +208,7 @@
                 <div class="container">
                     @if (session('messages'))
                         <!--Toast-->
-                        <div class="alert-toast fixed bottom-auto md:top-0 right-0 m-8 w-5/6 md:w-full max-w-sm items-center">
+                        <div class="alert-toast fixed bottom-auto md:top-0 right-0 m-8 w-5/6 md:w-full max-w-sm items-center z-50">
                             <input type="checkbox" class="hidden" id="footertoast">
 
                             <label class="close cursor-pointer flex items-start justify-between w-full pl-3 pt-3 bg-greenschool-200 md:h-auto h-auto rounded shadow-lg text-white" title="close" for="footertoast">
@@ -226,7 +226,7 @@
                 <div class="container">
                     @if (session('errores'))
                         <!--Toast-->
-                        <div class="alert-toast fixed bottom-auto md:top-0 right-0 m-8 w-5/6 md:w-full max-w-sm">
+                        <div class="alert-toast fixed bottom-auto md:top-0 right-0 m-8 w-5/6 md:w-full max-w-sm z-50">
                             <input type="checkbox" class="hidden" id="footertoast">
 
                             <label class="close cursor-pointer flex items-start justify-between w-full pl-3 pt-3 bg-red-500 sm:h-20 md:h-auto h-auto rounded shadow-lg text-white" title="close" for="footertoast">
@@ -301,10 +301,48 @@
 
         }
 
+
     // let main = document.getElementById('app')
     // main.addEventListener('click',function(e){
     //     nt.classList.toggle("hidden");
     // })
+
+    //almacenando el div y el boton en unas variables
+    var div = document.getElementById('capa');
+    var but = document.getElementById('boton');
+
+    //la funcion que oculta y muestra
+    function showHide(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if(div.style.display == "none"){
+    div.style.display = "block";
+    } else if(div.style.display == "block"){
+    div.style.display = "none";
+    }
+    }
+    //al hacer click en el boton
+    but.addEventListener("click", showHide, false);
+
+    //funcion para cualquier clic en el documento
+    document.addEventListener("click", function(e){
+    //obtiendo informacion del DOM para
+    var clic = e.target;
+    if(div.style.display == "block" && clic != div){
+    div.style.display = "none";
+    }
+    }, false);
+
+
+
+    //Script para manener scroll al recargar página
+    window.onload=function(){
+    var pos=window.name || 0;
+    window.scrollTo(0,pos);
+    }
+    window.onunload=function(){
+    window.name=self.pageYOffset || (document.documentElement.scrollTop+document.body.scrollTop);
+    }
 
     </script>
 </body>
